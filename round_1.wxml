@@ -1,0 +1,20 @@
+<!--pages/round_1/round_1.wxml-->
+<image class='bg-img' src='../../image/game/游戏页面背景.jpg' ></image>
+<!-- <view class='round'>ROUND 1</view> -->
+<image class='title' src='../../image/game/round1.PNG' style="position: absolute; left: 200rpx; top: 139rpx; width: 400rpx; height: 131rpx; display: block;"></image>
+<text class="page-indicator" hidden='{{hidden_indicator}}'>{{current + 1}} / {{questions.length}}</text>
+<!-- 轮播图实现答题区域 -->
+<swiper hidden="{{hidden_swiper}}" indicator-dots="{{indicatorDots}}" autoplay="{{autoplay}}" interval="{{interval}}" duration="{{duration}}" circular="{{circular}}" vertical="{{vertical}}" current="{{current}}" bindchange="swiperChange" class="swiper">
+  <block wx:for="{{questions}}" wx:key="*this">
+    <swiper-item class="question-container">
+      <image src="{{item.imgUrl}}" mode="aspectFit" class="question-img" style="width: 664rpx; height: 689rpx; display: block; box-sizing: border-box"></image>
+      <input placeholder="请输入答案" class="answer-input" bindinput="onInputChange" data-index="{{index}}"></input>
+    </swiper-item>
+  </block>
+</swiper>
+<!-- 提交答案 -->
+<button class='submit' style="width:180rpx;" bindtap='submitAnswer' hidden='{{hidden_submit}}'>提交</button>
+<button class='new' style="width:230rpx;" bindtap='new'  hidden='{{hidden_new}}'>下一关</button>
+<button class='one_more' bindtap='more'style="width:250rpx;" hidden='{{hidden_more}}'>再来一轮</button>
+<!-- 结果 -->
+<image  class='result'src='{{res_src}}' style="position: absolute; left: 0rpx; top: 425rpx"></image>

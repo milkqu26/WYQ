@@ -1,0 +1,82 @@
+<!--pages/generate/generate.wxml-->
+<!-- 标题 -->
+<view class='page_contain'>
+  <view class="backdrop" wx:if="{{showModal}}" bindtap='cancel'></view>
+  <view class='hand-sign-generate'>手语生成</view>
+  <!-- <image src='../../image/手语生成.png' style="width:700rpx;height:180rpx;margin-top:-20rpx;margin-left:20rpx"></image> -->
+  <!-- 悬浮窗 -->
+  <!-- <view class="float-window" bindtap='flowty_window'>
+  </view>
+  <image src='../../image/浏览历史 (1).png' class='history' bindtap='history' hidden='{{hidden_flow}}'></image>
+  <image src='{{like_src}}' class='like' hidden='{{hidden_flow}}' bindtap='like'></image> -->
+  <view class="float-window" style="left: {{x}}px; top: {{y}}px;" bindtouchstart="touchStart" bindtouchmove="touchMove" bindtap='flowty_window'>
+  <image src='../../image/浏览历史 (1).png' class='history' bindtap='history' bindtouchstart="touchStart" bindtouchmove="touchMove"  hidden='{{hidden_flow}}'></image>
+<image src='{{like_src}}'class='like' bindtap='like' bindtouchstart="touchStart" bindtouchmove="touchMove" hidden='{{hidden_flow}}' ></image>
+</view>
+  <view class="save_history {{ historyList.length > 13 ? 'Modal' : '' }}" wx:if="{{ showModal }}">
+  <view class='tips_title'>浏览历史</view>
+  <block wx:for="{{ historyList }}" wx:key="index" class='move'>
+    <view bindtap='show_history' data-index="{{ index }}">
+      <text class="modal-text" id="text-{{ index }}">{{ item }}</text>
+    </view>
+  </block>
+</view>
+
+  <!-- 遮盖层 -->
+  <view class="mask" hidden="{{showMask}}" bindtap="hideComponent"></view>
+  <!-- <view class='hand-sign-generate'>手语生成</view> -->
+  <view class='english' style="position: relative; left: 20rpx; top: 4rpx">SIGN LANAUAGE GENERATION</view>
+  <!-- 录音模块 -->
+  <view style="width: 750rpx; height: 568rpx; display: block; box-sizing: border-box">
+    <button class='btn_record' bindtap="start">开始录音</button>
+    <!-- 录音 -->
+    <action-sheet hidden="{{hidden_actionSheet}}">
+      <!-- <button class="start" bindtap="record_start" > 开始录音 </button> -->
+      <!-- 取消按钮可以不用 -->
+      <!-- <button class='stop' bindtap="record_stop">结束录音</button> -->
+      <image class='img_record' src="{{img_src}}" bindlongpress="startRecord" bindtouchend="stopRecord" style="width:100rpx;height:100rpx;margin-left:300rpx"></image>
+    </action-sheet>
+    <!-- 录音模块 -->
+    <view class="record-area">
+      <!-- 播放栏 -->
+      <view class='media' display:flex>
+        <image class='btn' src="{{currentImage}}" bindtap="playAudio" min='0' max='{{audioDuratio}}' style="width: 475rpx; height: 50rpx; display: block; box-sizing: border-box; left: 20rpx; top: 25rpx; position: relative"></image>
+        <!-- <progress class='progress' active stroke-width='3'></progress> -->
+        <view class='slider' style=" height: 100rpx; display: block; box-sizing: border-box">
+          <view wx:if="{{tempFilePath !== null}}">
+            <slider style="width: 280rpx; height: 35rpx; display: block; box-sizing: border-box; position: relative; left: 58rpx; top: 18rpx;" active-color="#70BEF1" background-color="#ccc" disabled="{{false}}" value="{{audioTime}}" max="100" bindchange="sliderChange"></slider>
+          </view>
+        </view>
+        <view class='time' style="position: relative; left:-280rpx;top: 75rpx; width: 174rpx; height: 50rpx; display: block; box-sizing: border-box">
+          {{showTime1}}/{{showTime2}}
+        </view>
+        <image class='yl' src='../../image/音量.png' style="width: 500rpx; height: 50rpx; display: flex; box-sizing: content-box; left: -160rpx; top: 25rpx" bindtap='showVolume'></image>
+        <!-- <slider class="vertical-slider" value="{{volume}}" min="0" max="100" show-value bindchange="changeVolume" hidden='{{hidden_volume}}></slider> -->
+
+        <image class='speed' src='../../image/Android更多.png' bindtap="showSpeedPicker"></image>
+        <!-- 倍数选择下拉栏 -->
+        <view class="custom-picker" wx:if="{{showSpeedPicker}}">
+          <view class="picker-item" bindtap="changeSpeed" data-speed="0.5">0.5x</view>
+          <view class="picker-item" bindtap="changeSpeed" data-speed="1.0">1.0x</view>
+          <view class="picker-item" bindtap="changeSpeed" data-speed="1.5">1.5x</view>
+          <view class="picker-item" bindtap="changeSpeed" data-speed="2.0">2.0x</view>
+        </view>
+      </view>
+    </view>
+    <button class='translate'>语音转文字</button>
+    <!-- 输出文字信息 -->
+    <view class='output'>
+      <textarea class='result_output' bindinput="out_textout_text" value="{{recognitionResult}}" placeholder="{{warn}}"></textarea>
+    </view>
+  </view>
+  <!-- 生成模块 -->
+  <view style="width: 750rpx; height: 566rpx; display: block; box-sizing: border-box">
+    <button class='btn-generate' bindtap='startGenerate'>开始生成</button>
+    <view class='video' style="width: 660rpx; height: 400rpx; display: block; box-sizing: border-box">
+      <view class='act' bindtap="" style="position: relative; left: 205rpx; top: 75rpx">
+        <image class='act-btn' src='../../image/三角形 (1).png' bindtap='showVedio'></image>
+        <vedio hidden="{{hidden_vedio}}" src="{{videoSrc}}" controls></vedio>
+      </view>
+    </view>
+  </view>
+</view>
